@@ -1,15 +1,19 @@
 {
   "extends": ["next/core-web-vitals", "next/typescript"],
+  "ignorePatterns": [
+    "app/api/templates/**/*"  // Ignore the folder entirely
+  ],
   "overrides": [
     {
       "files": ["**/api/templates/**/*.{ts,tsx}"],
+      "parserOptions": {
+        "project": "./app/api/templates/tsconfig.json"  // Reference to the new tsconfig
+      },
       "rules": {
         "@typescript-eslint/explicit-module-boundary-types": "off",
         "@typescript-eslint/no-explicit-any": "off",
-        "@typescript-eslint/ban-ts-comment": "off"
-      },
-      "parserOptions": {
-        "project": "./tsconfig.json"
+        "@typescript-eslint/ban-ts-comment": "off",
+        "no-unused-vars": "off"
       }
     }
   ]
