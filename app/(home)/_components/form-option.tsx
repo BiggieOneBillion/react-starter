@@ -82,7 +82,7 @@ export default function FormOption() {
 
       // Create a download link
       const downloadLink = document.createElement("a");
-      const fileName = "folder.zip"; // Desired file name
+      const fileName = `${values.app_name}.zip`; // Desired file name
       downloadLink.href = URL.createObjectURL(blob);
       downloadLink.download = fileName;
 

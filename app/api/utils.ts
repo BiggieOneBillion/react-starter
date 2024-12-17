@@ -20,8 +20,7 @@ import {
   tanstackQuerySetUp as tanstackQueryTsSetUp,
 } from "./react-ts-setup-utils";
 
-const { writeFileSync, appendFileSync, existsSync, removeSync } =
-  fsExtra;
+const { writeFileSync, appendFileSync, existsSync, removeSync } = fsExtra;
 
 type Icustomise = {
   options: {
@@ -176,7 +175,7 @@ export function customizeProjectJs({ projectDir, options }: Icustomise) {
     }
     const packageJsonContent = `
         {
-          "name": ${projectName},
+          "name": "${projectName}",
           "private": true,
           "version": "0.0.0",
           "type": "module",
@@ -344,7 +343,7 @@ export function customizeProjectTS({ projectDir, options }: Icustomise) {
     }
     const packageJsonContent = `
           {
-            "name": "${projectName}",
+            "name": "react-app",
             "private": true,
             "version": "0.0.0",
             "type": "module",

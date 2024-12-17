@@ -53,6 +53,7 @@ export async function POST(request: NextRequest) {
         // Pipe the archiver output to the controller
         archive.on("data", (chunk) => controller.enqueue(chunk));
         archive.on("end", () => {
+          console.log("Archive successfully created")
           controller.close();
           removeSync(projectDir);
         });
@@ -66,9 +67,11 @@ export async function POST(request: NextRequest) {
 
     // Create the response headers
     const headers = new Headers({
-      "Content-Disposition": "attachment; filename=folder.zip",
+      "Content-Disposition": `attachment; filename="react-app.zip"`,
       "Content-Type": "application/zip",
     });
+
+    console.log("Headers:---------------------------", headers);
 
     return new NextResponse(zipStream, { headers });
   } catch (error) {
