@@ -9,6 +9,17 @@ export const stylingData = [
   },
 ];
 
+export const lang = [
+  {
+    label: "Javascript",
+    option: "js",
+  },
+  {
+    label: "Typescript",
+    option: "ts",
+  },
+];
+
 export const uiLibrary = [
   {
     label: "ShadCN",

@@ -15,8 +15,12 @@ export async function POST(request: NextRequest) {
     const body = await request.json(); // Correctly parse the JSON body
 
     const templatesPath = join(__dirname, "..", "templates");
-    const selectedTemplate = "basic";
+    // const templatesPath = join('../templates');
+    const selectedTemplate = body.lang === "js" ? "basic" : "basic-ts"; // based on the user choice of either typescript or javascript we are going to select the template
     const templatePath = join(templatesPath, selectedTemplate);
+
+    // console.log("Template Path -----",templatesPath);
+    // console.log("Templates in Path -----",templatePath);
 
     const options = {
       projectName: body.app_name,
@@ -29,6 +33,7 @@ export async function POST(request: NextRequest) {
       serverState: body.server_state,
       formManagement: body.form_management,
       toastLibrary: body.toast_library,
+      lang: body.lang,
     };
 
     await setupProject({

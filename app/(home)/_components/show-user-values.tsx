@@ -11,6 +11,7 @@ type UserValues = {
   data_validation: string;
   form_management: string;
   toast_library: string;
+  lang: string;
 };
 
 type Props = {
@@ -19,6 +20,7 @@ type Props = {
 
 const data: { label: string; objKey: keyof UserValues }[] = [
   { label: "App Name", objKey: "app_name" },
+  { label: "Language", objKey: "lang" },
   { label: "Styling", objKey: "styling" },
   { label: "UI Library", objKey: "ui_library" },
   { label: "Icon Library", objKey: "icon_library" },
@@ -35,12 +37,16 @@ const ShowUserValues = ({ userValues }: Props) => {
     <div className="grid grid-cols-2 gap-3 w-fit h-fit sticky top-0">
       {data.map((datum, index) => (
         <div key={index} className="space-y-2">
-          <p className="font-normal text-sm text-zinc-800 font-sans underline">{datum.label}</p>
+          <p className="font-normal text-sm text-zinc-800 font-sans underline">
+            {datum.label}
+          </p>
           {userValues[datum.objKey] ? (
             <p className="font-medium bg-zinc-800 text-white px-1 py-[2px] font-mono">
               {userValues[datum.objKey]}
             </p>
-          ) : <p className="h-4"></p>}
+          ) : (
+            <p className="h-4"></p>
+          )}
         </div>
       ))}
     </div>

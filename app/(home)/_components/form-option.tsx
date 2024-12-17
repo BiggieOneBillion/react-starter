@@ -27,6 +27,7 @@ import {
   dataValidation,
   formManagement,
   iconLibrary,
+  lang,
   serverStateManagement,
   stateManagement,
   stylingData,
@@ -47,6 +48,7 @@ const formSchema = z.object({
   data_validation: z.string(),
   form_management: z.string(),
   toast_library: z.string(),
+  lang: z.string(),
 });
 
 export default function FormOption() {
@@ -116,6 +118,37 @@ export default function FormOption() {
                   <Input placeholder="Enter the name" type="" {...field} />
                 </FormControl>
                 <FormDescription>The name of your application</FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="lang"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Programming Language</FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {lang.map((datum) => (
+                      <SelectItem key={datum.label} value={datum.option}>
+                        {datum.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormDescription>
+                  Choose your programming language
+                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}

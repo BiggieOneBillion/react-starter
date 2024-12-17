@@ -290,7 +290,7 @@ export function reactSetUpInit(
        const Home = () => {
         return (
             <>
-              <p> No place like home </>
+              <p> No place like home </p>
             </>
            )
         }
@@ -369,7 +369,7 @@ export function tanstackQuerySetUp(
         </StrictMode>,
         )
    `;
-  writeFileSync(join(providerDir, "tanstack-query.js"), providerContent);
+  writeFileSync(join(providerDir, "tanstack-query.jsx"), providerContent);
   writeFileSync(join(projectDir, "src/main.jsx"), updateMainJsContent);
 }
 
