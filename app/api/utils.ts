@@ -335,6 +335,7 @@ export function customizeProjectTS({ projectDir, options }: Icustomise) {
 
   // Install dependencies
   if (dependencies.length) {
+    const name = projectName;
     const list: Map<string, string> = new Map();
     list.set("react", "^18.3.1");
     list.set("react-dom", "^18.3.1");
@@ -343,7 +344,7 @@ export function customizeProjectTS({ projectDir, options }: Icustomise) {
     }
     const packageJsonContent = `
           {
-            "name": "react-app",
+            "name": "${name}",
             "private": true,
             "version": "0.0.0",
             "type": "module",
