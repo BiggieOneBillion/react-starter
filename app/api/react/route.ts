@@ -71,7 +71,6 @@ export async function POST(request: NextRequest) {
       "Content-Type": "application/zip",
     });
 
-    console.log("Headers:---------------------------", headers);
 
     return new NextResponse(zipStream, { headers });
   } catch (error) {
