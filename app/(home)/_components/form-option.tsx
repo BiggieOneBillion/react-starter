@@ -1,5 +1,5 @@
 "use client";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -61,6 +61,27 @@ export default function FormOption() {
 
   const formValues = form.watch();
 
+  const isPreviousFieldFilled = (fieldName: string): boolean => {
+    const fields = [
+      "app_name",
+      "lang",
+      "styling",
+      "ui_library",
+      "icon_library",
+      "state_management",
+      "server_state",
+      "data_fetching",
+      "data_validation",
+      "form_management",
+      "toast_library",
+    ];
+
+    const currentIndex = fields.indexOf(fieldName);
+    if (currentIndex === 0) return true;
+    const previousField = fields[currentIndex - 1];
+    return !!formValues[previousField as keyof typeof formValues];
+  };
+
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true); // spinner should start
     try {
@@ -98,6 +119,17 @@ export default function FormOption() {
     }
   }
 
+  const isStyledComponentsSelected = () => {
+    return formValues.styling === "styled-components";
+  };
+
+  // Add effect to set UI library to none when styled-components is selected
+  useEffect(() => {
+    if (isStyledComponentsSelected()) {
+      form.setValue("ui_library", "none");
+    }
+  }, [formValues.styling]);
+
   return (
     <section className="grid xl:grid-cols-2 gap-10 relative">
       <a href="#" className="hidden" ref={downloadRef}>
@@ -132,10 +164,17 @@ export default function FormOption() {
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
+                  disabled={!isPreviousFieldFilled("lang")}
                 >
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder="" />
+                      <SelectValue
+                        placeholder={
+                          !isPreviousFieldFilled("lang")
+                            ? "Complete previous field first"
+                            : ""
+                        }
+                      />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
@@ -147,7 +186,9 @@ export default function FormOption() {
                   </SelectContent>
                 </Select>
                 <FormDescription>
-                  Choose your programming language
+                  {!isPreviousFieldFilled("lang")
+                    ? "Please fill in the previous field first"
+                    : "Choose your programming language"}
                 </FormDescription>
                 <FormMessage />
               </FormItem>
@@ -163,10 +204,17 @@ export default function FormOption() {
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
+                  disabled={!isPreviousFieldFilled("styling")}
                 >
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder="" />
+                      <SelectValue
+                        placeholder={
+                          !isPreviousFieldFilled("styling")
+                            ? "Complete previous field first"
+                            : ""
+                        }
+                      />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
@@ -177,7 +225,11 @@ export default function FormOption() {
                     ))}
                   </SelectContent>
                 </Select>
-                <FormDescription>Choose your styling option</FormDescription>
+                <FormDescription>
+                  {!isPreviousFieldFilled("styling")
+                    ? "Please fill in the previous field first"
+                    : "Choose your styling option"}
+                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -192,10 +244,23 @@ export default function FormOption() {
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
+                  disabled={
+                    !isPreviousFieldFilled("ui_library") ||
+                    isStyledComponentsSelected()
+                  }
+                  value={isStyledComponentsSelected() ? "none" : field.value}
                 >
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder="" />
+                      <SelectValue
+                        placeholder={
+                          !isPreviousFieldFilled("ui_library")
+                            ? "Complete previous field first"
+                            : isStyledComponentsSelected()
+                            ? "Not available with styled-components"
+                            : ""
+                        }
+                      />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
@@ -207,7 +272,11 @@ export default function FormOption() {
                   </SelectContent>
                 </Select>
                 <FormDescription>
-                  Select your preferred UI Library
+                  {!isPreviousFieldFilled("ui_library")
+                    ? "Please fill in the previous field first"
+                    : isStyledComponentsSelected()
+                    ? "UI Library is not needed when using styled-components"
+                    : "Choose your ui library"}
                 </FormDescription>
                 <FormMessage />
               </FormItem>
@@ -223,10 +292,17 @@ export default function FormOption() {
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
+                  disabled={!isPreviousFieldFilled("icon_library")}
                 >
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder="" />
+                      <SelectValue
+                        placeholder={
+                          !isPreviousFieldFilled("icon_library")
+                            ? "Complete previous field first"
+                            : ""
+                        }
+                      />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
@@ -237,7 +313,11 @@ export default function FormOption() {
                     ))}
                   </SelectContent>
                 </Select>
-                <FormDescription>Select your icon library</FormDescription>
+                <FormDescription>
+                  {!isPreviousFieldFilled("icon_library")
+                    ? "Please fill in the previous field first"
+                    : "Choose your icon library"}
+                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -248,14 +328,21 @@ export default function FormOption() {
             name="state_management"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>State Management</FormLabel>
+                <FormLabel>State management</FormLabel>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
+                  disabled={!isPreviousFieldFilled("state_management")}
                 >
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder="" />
+                      <SelectValue
+                        placeholder={
+                          !isPreviousFieldFilled("state_management")
+                            ? "Complete previous field first"
+                            : ""
+                        }
+                      />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
@@ -267,7 +354,9 @@ export default function FormOption() {
                   </SelectContent>
                 </Select>
                 <FormDescription>
-                  Select your preferred state management
+                  {!isPreviousFieldFilled("state_management")
+                    ? "Please fill in the previous field first"
+                    : "Choose your state management"}
                 </FormDescription>
                 <FormMessage />
               </FormItem>
@@ -283,10 +372,17 @@ export default function FormOption() {
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
+                  disabled={!isPreviousFieldFilled("server_state")}
                 >
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder="" />
+                      <SelectValue
+                        placeholder={
+                          !isPreviousFieldFilled("server_state")
+                            ? "Complete previous field first"
+                            : ""
+                        }
+                      />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
@@ -298,7 +394,9 @@ export default function FormOption() {
                   </SelectContent>
                 </Select>
                 <FormDescription>
-                  Select your preferred server state management tool
+                  {!isPreviousFieldFilled("server_state")
+                    ? "Please fill in the previous field first"
+                    : "Choose your server state management tool"}
                 </FormDescription>
                 <FormMessage />
               </FormItem>
@@ -310,14 +408,21 @@ export default function FormOption() {
             name="data_fetching"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Data Fetching </FormLabel>
+                <FormLabel>Data Fetching Library</FormLabel>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
+                  disabled={!isPreviousFieldFilled("data_fetching")}
                 >
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder="" />
+                      <SelectValue
+                        placeholder={
+                          !isPreviousFieldFilled("data_fetching")
+                            ? "Complete previous field first"
+                            : ""
+                        }
+                      />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
@@ -329,7 +434,9 @@ export default function FormOption() {
                   </SelectContent>
                 </Select>
                 <FormDescription>
-                  Select your preferred data fetching library
+                  {!isPreviousFieldFilled("data_fetching")
+                    ? "Please fill in the previous field first"
+                    : "Choose your data fetching library"}
                 </FormDescription>
                 <FormMessage />
               </FormItem>
@@ -345,10 +452,17 @@ export default function FormOption() {
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
+                  disabled={!isPreviousFieldFilled("data_validation")}
                 >
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue />
+                      <SelectValue
+                        placeholder={
+                          !isPreviousFieldFilled("data_validation")
+                            ? "Complete previous field first"
+                            : ""
+                        }
+                      />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
@@ -360,7 +474,9 @@ export default function FormOption() {
                   </SelectContent>
                 </Select>
                 <FormDescription>
-                  Choose your data validation library
+                  {!isPreviousFieldFilled("data_validation")
+                    ? "Please fill in the previous field first"
+                    : "Choose your data validation library"}
                 </FormDescription>
                 <FormMessage />
               </FormItem>
@@ -372,14 +488,21 @@ export default function FormOption() {
             name="form_management"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Form Management </FormLabel>
+                <FormLabel>Form Management</FormLabel>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
+                  disabled={!isPreviousFieldFilled("form_management")}
                 >
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue />
+                      <SelectValue
+                        placeholder={
+                          !isPreviousFieldFilled("form_management")
+                            ? "Complete previous field first"
+                            : ""
+                        }
+                      />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
@@ -391,7 +514,9 @@ export default function FormOption() {
                   </SelectContent>
                 </Select>
                 <FormDescription>
-                  Select your preferred form management tool
+                  {!isPreviousFieldFilled("form_management")
+                    ? "Please fill in the previous field first"
+                    : "Choose your form management tool"}
                 </FormDescription>
                 <FormMessage />
               </FormItem>
@@ -407,10 +532,17 @@ export default function FormOption() {
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
+                  disabled={!isPreviousFieldFilled("toast_library")}
                 >
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder="" />
+                      <SelectValue
+                        placeholder={
+                          !isPreviousFieldFilled("toast_library")
+                            ? "Complete previous field first"
+                            : ""
+                        }
+                      />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
@@ -422,7 +554,9 @@ export default function FormOption() {
                   </SelectContent>
                 </Select>
                 <FormDescription>
-                  Select your preferred toast system
+                  {!isPreviousFieldFilled("toast_library")
+                    ? "Please fill in the previous field first"
+                    : "Choose your toast library"}
                 </FormDescription>
                 <FormMessage />
               </FormItem>
