@@ -202,6 +202,84 @@ export function customizeProjectJs({ projectDir, options }: Icustomise) {
       `;
     writeFileSync(join(projectDir, "package.json"), packageJsonContent);
 
+    // README with dependencies documentation
+    const dependencyDocs = `
+    # ${projectName}
+    
+    ## Dependencies Documentation
+    
+    ### Core Dependencies
+    - [React](https://react.dev/) - A JavaScript library for building user interfaces
+    - [React DOM](https://react.dev/reference/react-dom) - React package for working with the DOM
+    
+    ${styling === 'tailwindcss' ? `### Styling
+    - [Tailwind CSS](https://tailwindcss.com/) - A utility-first CSS framework
+    ` : styling === 'Styled-components' ? `### Styling
+    - [Styled Components](https://styled-components.com/) - Visual primitives for the component age
+    ` : ''}
+    
+    ${router === 'React-router' ? `### Routing
+    - [React Router](https://reactrouter.com/) - Declarative routing for React applications
+    ` : ''}
+    
+    ${stateManagement === 'redux' ? `### State Management
+    - [Redux Toolkit](https://redux-toolkit.js.org/) - The official, opinionated toolset for Redux development
+    - [React Redux](https://react-redux.js.org/) - Official React bindings for Redux
+    ` : stateManagement === 'zustand' ? `### State Management
+    - [Zustand](https://zustand-demo.pmnd.rs/) - A small, fast, and scalable state management solution
+    ` : ''}
+    
+    ${serverState === 'tanstack-qwery' ? `### Server State Management
+    - [TanStack Query](https://tanstack.com/query/latest) - Powerful asynchronous state management
+    ` : serverState === 'swr' ? `### Server State Management
+    - [SWR](https://swr.vercel.app/) - React Hooks for Data Fetching
+    ` : ''}
+    
+    ${dataFetching === 'axios' ? `### Data Fetching
+    - [Axios](https://axios-http.com/) - Promise based HTTP client
+    ` : ''}
+    
+    ${formManagement === 'react-hook-form' ? `### Form Management
+    - [React Hook Form](https://react-hook-form.com/) - Performant, flexible and extensible forms
+    ` : formManagement === 'formik' ? `### Form Management
+    - [Formik](https://formik.org/) - Build forms in React without tears
+    ` : ''}
+    
+    ${iconsLibrary === 'react-icon' ? `### Icons
+    - [React Icons](https://react-icons.github.io/react-icons/) - Popular icons in one package
+    ` : iconsLibrary === 'lucide' ? `### Icons
+    - [Lucide React](https://lucide.dev/) - Beautiful & consistent icons
+    ` : ''}
+    
+    ${uiLibrary === 'shadcn' ? `### UI Components
+    - [shadcn/ui](https://ui.shadcn.com/) - Re-usable components built with Radix UI and Tailwind CSS
+    ` : ''}
+    
+    ## Development Dependencies
+    - [Vite](https://vitejs.dev/) - Next Generation Frontend Tooling
+    - [TypeScript](https://www.typescriptlang.org/) - JavaScript with syntax for types
+    - [ESLint](https://eslint.org/) - Pluggable JavaScript linter
+    
+    ## Getting Started
+    
+    1. Install dependencies:
+    \`\`\`bash
+    npm install
+    \`\`\`
+    
+    2. Start development server:
+    \`\`\`bash
+    npm run dev
+    \`\`\`
+    
+    3. Build for production:
+    \`\`\`bash
+    npm run build
+    \`\`\`
+    `;
+    
+    writeFileSync(join(projectDir, "README.md"), dependencyDocs);
+
     cleanupTemp(tempDir);
   }
 }
@@ -370,6 +448,84 @@ export function customizeProjectTS({ projectDir, options }: Icustomise) {
           }
         `;
     writeFileSync(join(projectDir, "package.json"), packageJsonContent);
+
+      // Generate detailed README with dependencies documentation
+      const dependencyDocs = `
+      # ${projectName}
+      
+      ## Dependencies Documentation
+      
+      ### Core Dependencies
+      - [React](https://react.dev/) - A JavaScript library for building user interfaces
+      - [React DOM](https://react.dev/reference/react-dom) - React package for working with the DOM
+      
+      ${styling === 'tailwindcss' ? `### Styling
+      - [Tailwind CSS](https://tailwindcss.com/) - A utility-first CSS framework
+      ` : styling === 'Styled-components' ? `### Styling
+      - [Styled Components](https://styled-components.com/) - Visual primitives for the component age
+      ` : ''}
+      
+      ${router === 'React-router' ? `### Routing
+      - [React Router](https://reactrouter.com/) - Declarative routing for React applications
+      ` : ''}
+      
+      ${stateManagement === 'redux' ? `### State Management
+      - [Redux Toolkit](https://redux-toolkit.js.org/) - The official, opinionated toolset for Redux development
+      - [React Redux](https://react-redux.js.org/) - Official React bindings for Redux
+      ` : stateManagement === 'zustand' ? `### State Management
+      - [Zustand](https://zustand-demo.pmnd.rs/) - A small, fast, and scalable state management solution
+      ` : ''}
+      
+      ${serverState === 'tanstack-qwery' ? `### Server State Management
+      - [TanStack Query](https://tanstack.com/query/latest) - Powerful asynchronous state management
+      ` : serverState === 'swr' ? `### Server State Management
+      - [SWR](https://swr.vercel.app/) - React Hooks for Data Fetching
+      ` : ''}
+      
+      ${dataFetching === 'axios' ? `### Data Fetching
+      - [Axios](https://axios-http.com/) - Promise based HTTP client
+      ` : ''}
+      
+      ${formManagement === 'react-hook-form' ? `### Form Management
+      - [React Hook Form](https://react-hook-form.com/) - Performant, flexible and extensible forms
+      ` : formManagement === 'formik' ? `### Form Management
+      - [Formik](https://formik.org/) - Build forms in React without tears
+      ` : ''}
+      
+      ${iconsLibrary === 'react-icon' ? `### Icons
+      - [React Icons](https://react-icons.github.io/react-icons/) - Popular icons in one package
+      ` : iconsLibrary === 'lucide' ? `### Icons
+      - [Lucide React](https://lucide.dev/) - Beautiful & consistent icons
+      ` : ''}
+      
+      ${uiLibrary === 'shadcn' ? `### UI Components
+      - [shadcn/ui](https://ui.shadcn.com/) - Re-usable components built with Radix UI and Tailwind CSS
+      ` : ''}
+      
+      ## Development Dependencies
+      - [Vite](https://vitejs.dev/) - Next Generation Frontend Tooling
+      - [TypeScript](https://www.typescriptlang.org/) - JavaScript with syntax for types
+      - [ESLint](https://eslint.org/) - Pluggable JavaScript linter
+      
+      ## Getting Started
+      
+      1. Install dependencies:
+      \`\`\`bash
+      npm install
+      \`\`\`
+      
+      2. Start development server:
+      \`\`\`bash
+      npm run dev
+      \`\`\`
+      
+      3. Build for production:
+      \`\`\`bash
+      npm run build
+      \`\`\`
+      `;
+      
+      writeFileSync(join(projectDir, "README.md"), dependencyDocs);
 
     cleanupTemp(tempDir);
   }

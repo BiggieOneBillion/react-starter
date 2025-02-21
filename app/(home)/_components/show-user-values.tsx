@@ -34,7 +34,7 @@ const data: { label: string; objKey: keyof UserValues }[] = [
 
 const ShowUserValues = ({ userValues }: Props) => {
   return (
-    <div className="grid grid-cols-2 gap-3 w-fit h-fit sticky top-0">
+    <div className="grid md:grid-cols-2 gap-3 w-fit h-fit sticky top-0">
       {data.map((datum, index) => (
         <div key={index} className="space-y-2">
           <p className="font-normal text-sm text-zinc-800 font-sans underline">

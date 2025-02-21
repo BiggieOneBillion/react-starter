@@ -36,6 +36,7 @@ import {
 } from "../data";
 import ShowUserValues from "./show-user-values";
 import { Loader2 } from "lucide-react";
+import { ConfirmationModal } from "./result-alert-dialog";
 
 const formSchema = z.object({
   app_name: z.string(),
@@ -58,6 +59,13 @@ export default function FormOption() {
   });
 
   const [isLoading, setIsLoading] = useState(false);
+
+  const [isDesktop, setIsDesktop] = useState(false);
+
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [pendingValues, setPendingValues] = useState<z.infer<
+    typeof formSchema
+  > | null>(null);
 
   const formValues = form.watch();
 
@@ -82,42 +90,100 @@ export default function FormOption() {
     return !!formValues[previousField as keyof typeof formValues];
   };
 
+  // async function onSubmit(values: z.infer<typeof formSchema>) {
+  //   setIsLoading(true); // spinner should start
+  //   try {
+  //     const response = await fetch("/api/react", {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify(values), // Your POST request payload
+  //     });
+
+  //     if (!response.ok) {
+  //       throw new Error(`HTTP error! Status: ${response.status}`);
+  //     }
+
+  //     const blob = await response.blob(); // Convert the response to a Blob
+
+  //     setIsLoading(false); // stop the spinner
+
+  //     // Create a download link
+  //     const downloadLink = document.createElement("a");
+  //     const fileName = `${values.app_name}.zip`; // Desired file name
+  //     downloadLink.href = URL.createObjectURL(blob);
+  //     downloadLink.download = fileName;
+
+  //     // Trigger download
+  //     document.body.appendChild(downloadLink);
+  //     downloadLink.click();
+  //     document.body.removeChild(downloadLink);
+  //     toast.success("Successful");
+  //   } catch (error) {
+  //     setIsLoading(false); // stop the spinner
+  //     // console.error("Form submission error", error);
+  //     toast.error("Please try again.");
+  //   }
+  // }
+
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    setIsLoading(true); // spinner should start
+    // Check if we're on mobile
+    if (window.innerWidth < 768) {
+      setPendingValues(values);
+      setShowConfirmation(true);
+      return;
+    }
+
+    await handleSubmission(values);
+  }
+
+  async function handleSubmission(values: z.infer<typeof formSchema>) {
+    setIsLoading(true);
     try {
       const response = await fetch("/api/react", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(values), // Your POST request payload
+        body: JSON.stringify(values),
       });
 
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
 
-      const blob = await response.blob(); // Convert the response to a Blob
+      const blob = await response.blob();
+      setIsLoading(false);
 
-      setIsLoading(false); // stop the spinner
-
-      // Create a download link
       const downloadLink = document.createElement("a");
-      const fileName = `${values.app_name}.zip`; // Desired file name
+      const fileName = `${values.app_name}.zip`;
       downloadLink.href = URL.createObjectURL(blob);
       downloadLink.download = fileName;
 
-      // Trigger download
       document.body.appendChild(downloadLink);
       downloadLink.click();
       document.body.removeChild(downloadLink);
       toast.success("Successful");
     } catch (error) {
-      setIsLoading(false); // stop the spinner
-      console.error("Form submission error", error);
-      toast.error("Failed to submit the form. Please try again.");
+      setIsLoading(false);
+      toast.error("Please try again.");
     }
   }
+
+  // Add these handler functions
+  const handleConfirmSubmit = () => {
+    if (pendingValues) {
+      handleSubmission(pendingValues);
+      setShowConfirmation(false);
+      setPendingValues(null);
+    }
+  };
+
+  const handleCancelSubmit = () => {
+    setShowConfirmation(false);
+    setPendingValues(null);
+  };
 
   const isStyledComponentsSelected = () => {
     return formValues.styling === "styled-components";
@@ -130,8 +196,20 @@ export default function FormOption() {
     }
   }, [formValues.styling]);
 
+  useEffect(() => {
+    const handleCheck = () => {
+      setIsDesktop(window.innerWidth >= 768);
+    };
+
+    handleCheck();
+
+    window.addEventListener("resize", handleCheck);
+
+    return () => window.removeEventListener("resize", handleCheck);
+  }, []);
+
   return (
-    <section className="grid xl:grid-cols-2 gap-10 relative">
+    <section className="grid w-full xl:grid-cols-2 gap-10 relative">
       <a href="#" className="hidden" ref={downloadRef}>
         downloadlink
       </a>
@@ -574,7 +652,15 @@ export default function FormOption() {
           </Button>
         </form>
       </Form>
-      <ShowUserValues userValues={formValues} />
+      {isDesktop && <ShowUserValues userValues={formValues} />}
+      {!isDesktop && (
+        <ConfirmationModal
+          isOpen={showConfirmation}
+          onClose={handleCancelSubmit}
+          onConfirm={handleConfirmSubmit}
+          formValues={pendingValues || {}}
+        />
+      )}
     </section>
   );
 }
