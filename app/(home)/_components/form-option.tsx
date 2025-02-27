@@ -165,7 +165,7 @@ export default function FormOption() {
       downloadLink.click();
       document.body.removeChild(downloadLink);
       toast.success("Successful");
-    } catch (error) {
+    } catch (_error) {
       setIsLoading(false);
       toast.error("Please try again.");
     }
