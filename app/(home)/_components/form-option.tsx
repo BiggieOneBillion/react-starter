@@ -37,6 +37,8 @@ import {
 import ShowUserValues from "./show-user-values";
 import { Loader2 } from "lucide-react";
 import { ConfirmationModal } from "./result-alert-dialog";
+import { ProjectCustomizer } from "./project-customizer";
+
 
 const formSchema = z.object({
   app_name: z.string(),
@@ -194,7 +196,8 @@ export default function FormOption() {
     if (isStyledComponentsSelected()) {
       form.setValue("ui_library", "none");
     }
-  }, [formValues.styling]);
+  }, [formValues.styling, form]);
+
 
   useEffect(() => {
     const handleCheck = () => {
@@ -640,6 +643,13 @@ export default function FormOption() {
               </FormItem>
             )}
           />
+
+          {/* Project Customizer - File Structure & Packages */}
+          {/* <div className="pt-6 border-t">
+            <h3 className="text-lg font-semibold mb-4">Advanced Customization (Optional)</h3>
+            <ProjectCustomizer />
+          </div> */}
+
           <Button type="submit">
             {isLoading ? (
               <>
